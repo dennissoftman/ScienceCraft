@@ -1,0 +1,15 @@
+TARGET=ScienceCraft.exe
+CC=/usr/bin/x86_64-w64-mingw32-g++
+CXXFLAGS=-std=c++20 -O2 -I./deps/kissnet-master/
+LDFLAGS= -Lwin_libs/ \
+        win_libs/libSDL2.dll.a win_libs/libSDL2_image.dll.a win_libs/libpng.dll.a -lz -lm \
+        -lglew32 -lopengl32 -lpthread -lwsock32 -lws2_32
+
+SRCFILES=$(wildcard *.cpp)
+OBJFILES=$(patsubst %.cpp,win_build/%.o,$(SRCFILES))
+
+win_build/%.o: %.cpp
+	$(CC) -c $(CXXFLAGS) $< -o $@
+
+all: $(OBJFILES)
+	$(CC) $(OBJFILES) $(LDFLAGS) -o win_build/$(TARGET)
